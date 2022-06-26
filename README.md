@@ -9,6 +9,7 @@ If you run into trouble using the plugin or have suggestions for improvements, d
 # Functionality
 
 The plugin implements the following commands:
+
 - `:KittyOpenRunner`: Open a new kitty terminal (called a runner in the context of this plugin)
 - `:KittySendLines`: Send the line at the current cursor position or the lines of current visual selection
 - `:KittyRunCommand`: Prompt for a command and send it
@@ -17,6 +18,7 @@ The plugin implements the following commands:
 - `:KittyKillRunner`: Kill the runner
 
 By default a number of keymaps are created (see below to turn this off):
+
 - `<leader>to`: `:KittyOpenRunner`
 - `<leader>tr`: `:KittyRunCommand`
 - `<leader>ts`: `:KittySendLines`
@@ -46,12 +48,16 @@ require("kitty-runner").setup({
   -- name of the kitty terminal:
   runner_name = "kitty-runner-" .. uuid,
   -- kitty arguments when sending lines/command:
-  run_cmd = {"send-text", "--"},
+  run_cmd = { "send-text", "--match=title:" .. "kitty-runner-" .. uuid },
   -- kitty arguments when killing a runner:
-  kill_cmd = {"close-window"},
+  kill_cmd = { "close-window", "--match=title:" .. "kitty-runner-" .. uuid },
   -- use default keymaps:
   use_keymaps = true,
   -- the port used to communicate with the kitty terminal:
-  kitty_port = "unix:/tmp/kitty-" .. uuid,
+  kitty_port = "unix:/tmp/kitty",
+  -- arguments used when spawning the runner window
+  win_args = { "--keep-focus", "--cwd=" .. vim.fn.getcwd() },
+  -- when true the runner will close when neovim does
+  kill_on_quit = true,
 })
 ```
