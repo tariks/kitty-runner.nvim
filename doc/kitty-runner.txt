@@ -1,0 +1,181 @@
+*kitty-runner.txt*
+
+                            Vim Kitty Runner
+
+==============================================================================
+CONTENTS                                                        *kr-contents*
+
+      1. About............................ |KR-About|
+      2. Usage ........................... |KR-Usage|
+        2.1  ............................... |KittyRunCommand|
+        2.2  ............................... |KittyReRunCommand|
+        2.3  ............................... |KittyClearRunner|
+        2.4  ............................... |KittyKillRunner|
+        2.5  ............................... |KittyOpenRunner|
+      3. Configuration ................... |KR-Configuration|
+        3.1 ................................ |KittyUseMaps|
+        3.2 ................................ |KittyPort|
+        3.3 ................................ |KittyWinArgs|
+        3.4 ................................ |KittyKillOnQuit|
+
+==============================================================================
+ABOUT (1)                                                           *KR-About*
+
+KR -- Straightforward Vim/kitty integration
+
+A simple command runner for sending commands from neovim to the
+kitty [1] terminal emulator.  Inspired heavily by vim-tmux-runner [2].
+
+[1]: https://sw.kovidgoyal.net/kitty/index.html
+[2]: https://github.com/christoomey/vim-tmux-runner
+
+==============================================================================
+USAGE (2)                                                           *KR-Usage*
+
+KR offers the following commands:
+
+------------------------------------------------------------------------------
+                                                              *KittyRunCommand*
+2.1 KittyRunCommand
+
+Send a command to kitty. KR will ask you for a command to send.
+
+Example:
+  :KittyRunCommand
+
+If 'ls' were entered a new kitty window will open and 'ls' will be run.
+
+------------------------------------------------------------------------------
+                                                         *KittyReRunCommand*
+2.2 KittyReRunCommand
+
+Send the previous command (sent via |KittyRunCommand|) again.
+
+Example:
+  :KittyReRunCommand
+
+------------------------------------------------------------------------------
+                                                             *KittyClearRunner*
+2.3 KittyClearRunner
+
+Clear the active kitty runner. Similar to running 'clear' in a normal terminal 
+environment.
+
+Example:
+  :KittyClearRunner
+
+------------------------------------------------------------------------------
+                                                              *KittyKillRunner*
+2.4 KittyKillRunner
+
+Destroy the current kitty runner window.
+
+Example:
+  :KittyClearRunner
+
+------------------------------------------------------------------------------
+                                                              *KittyOpenRunner*
+2.4 KittyOpenRunner
+
+Spawn a kitty runner window, without running a command.
+
+Example:
+  :KittyOpenRunner
+
+==============================================================================
+CONFIGURATION (3)                                           *KR-Configuration*
+
+You can configure KR using the following settings:
+
+  require('kitty-runner').setup({
+    -- name of the kitty terminal:
+    runner_name = "kitty-runner-"' .. uuid,
+    -- kitty arguments when sending lines/command:
+    run_cmd = { "send-text", "--match=title:" .. "kitty-runner-" .. uuid },
+    -- kitty arguments when killing a runner:
+    kill_cmd = { "close-window", "--match=title:" .. "kitty-runner-" .. uuid },
+    -- use default keymaps:
+    use_keymaps = true,
+    -- the port used to communicate with the kitty terminal:
+    kitty_port = "unix:/tmp/kitty",
+    -- arguments used when spawning the runner window
+    win_args = { "--keep-focus", "--cwd=" .. vim.fn.getcwd() },
+    -- when true the runner will close when neovim does
+    kill_on_quit = true,
+  })
+
+------------------------------------------------------------------------------
+                                                                *KittyUseMaps*
+3.1 g:KittyUseMaps~
+
+Allow KR to set some sensible default keymappings for the default commands.
+To allow KR to set default mapping add this line to your config (or similar):
+
+  use_keymaps = true
+
+  or the following to disable them:
+
+  use_keymaps = false
+
+The following normal mode maps are provided when g:KittyUseMaps is set to 1:
+
+        Mapping      |   Command
+        -----------------------------
+        <leader>to   |   KittyOpenRunner<cr>
+        <leader>tr   |   KittyRunCommand<cr>
+        <leader>tl   |   KittyReRunCommand<cr>
+        <leader>tc   |   KittyClearRunner<cr>
+        <leader>tk   |   KittyKillRunner<cr>
+
+You can set your own mappings by adding a line like the following, to your
+config:
+
+    vim.api.nvim_set_keymap("n", "<leader>cr", ":KittyRunCommand<CR>", {})
+
+Default: true
+------------------------------------------------------------------------------
+                                                                    *KittyPort*
+3.2 g:KittyPort~
+
+Set the port that kitty listens to on you system for example:
+
+  kitty @ --to unix:/tmp/mykitty ls
+
+To set the port add the following to your config (or similar):
+
+  kitty_port = "unix:/tmp/whatever"
+
+More info: https://sw.kovidgoyal.net/kitty/remote-control.html#tutorial
+
+Default: unix:/tmp/kitty
+------------------------------------------------------------------------------
+                                                                    *KittyWinArgs*
+3.3 g:KittyWinArgs~
+
+Set the arguments for window creation that kitty will use.
+
+Add the following to your config (or similar):
+
+  win_args = { "--no-response" }
+
+More info: https://sw.kovidgoyal.net/kitty/remote-control.html#kitty-new-window
+
+Default: { "--keep-focus", "--cwd=" .. vim.fn.getcwd() }
+
+------------------------------------------------------------------------------
+                                                                    *KittyKillOnQuit*
+3.4 g:KittyKillOnQuit~
+
+Set whether or not KR will kill the runner when neovim quits (:qa).
+
+Add the following to your config (or similar):
+
+  kill_on_quit = true
+
+  or the following to disable kill on quit:
+
+  kill_on_quit = false
+
+Default: true (enabled)
+==============================================================================
+vim:tw=78:ts=2:sw=2:expandtab:ft=help:norl:
