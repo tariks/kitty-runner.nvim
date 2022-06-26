@@ -7,21 +7,24 @@ local nvim_set_keymap = vim.api.nvim_set_keymap
 
 -- get uuid
 local function get_uuid()
-  local uuid_handle = io.popen[[uuidgen]]
+  local uuid_handle = io.popen([[uuidgen]])
   local uuid = uuid_handle:read("*l")
   uuid_handle:close()
   return uuid
 end
 
 local uuid = get_uuid()
+local prefix = "kitty-runner-"
 
 -- default configulation values
 local default_config = {
-  runner_name = 'kitty-runner-' .. uuid,
-  run_cmd = {'send-text'},
-  kill_cmd = {'close-window'},
+  runner_name = prefix .. uuid,
+  run_cmd = { "send-text", "--match=title:" .. prefix .. uuid },
+  kill_cmd = { "close-window", "--match=title:" .. prefix .. uuid },
   use_keymaps = true,
-  kitty_port = 'unix:/tmp/kitty-' .. uuid,
+  kitty_port = "unix:/tmp/kitty",
+  win_args = { "--keep-focus", "--cwd=" .. vim.fn.getcwd() },
+  kill_on_quit = true,
 }
 
 local M = vim.deepcopy(default_config)
@@ -48,13 +51,13 @@ end
 
 -- define default keymaps
 M.define_keymaps = function()
-  nvim_set_keymap('n', '<leader>tr', ':KittyRunCommand<cr>', {silent = true})
-  nvim_set_keymap('x', '<leader>ts', ':KittySendLines<cr>', {silent = true})
-  nvim_set_keymap('n', '<leader>ts', ':KittySendLines<cr>', {silent = true})
-  nvim_set_keymap('n', '<leader>tc', ':KittyClearRunner<cr>', {silent = true})
-  nvim_set_keymap('n', '<leader>tk', ':KittyKillRunner<cr>', {silent = true})
-  nvim_set_keymap('n', '<leader>tl', ':KittyReRunCommand<cr>', {silent = true})
-  nvim_set_keymap('n', '<leader>to', ':KittyOpenRunner<cr>', {silent = true})
+  nvim_set_keymap("n", "<leader>tr", ":KittyRunCommand<cr>", { silent = true })
+  nvim_set_keymap("x", "<leader>ts", ":KittySendLines<cr>", { silent = true })
+  nvim_set_keymap("n", "<leader>ts", ":KittySendLines<cr>", { silent = true })
+  nvim_set_keymap("n", "<leader>tc", ":KittyClearRunner<cr>", { silent = true })
+  nvim_set_keymap("n", "<leader>tk", ":KittyKillRunner<cr>", { silent = true })
+  nvim_set_keymap("n", "<leader>tl", ":KittyReRunCommand<cr>", { silent = true })
+  nvim_set_keymap("n", "<leader>to", ":KittyOpenRunner<cr>", { silent = true })
 end
 
 return M
