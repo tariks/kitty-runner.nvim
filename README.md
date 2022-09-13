@@ -32,7 +32,7 @@ With packer:
 
 ```lua
 use {
-  "jghauser/kitty-runner.nvim",
+  "lkemitchll/kitty-runner.nvim",
   config = function()
     require("kitty-runner").setup()
   end
