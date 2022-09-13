@@ -32,9 +32,9 @@ With packer:
 
 ```lua
 use {
-  'jghauser/kitty-runner.nvim',
+  "jghauser/kitty-runner.nvim",
   config = function()
-    require('kitty-runner').setup()
+    require("kitty-runner").setup()
   end
 }
 ```
@@ -44,9 +44,9 @@ use {
 The setup function allows adjusting various settings. By default it sets the following:
 
 ```lua
-require('kitty-runner').setup({
+require("kitty-runner").setup({
   -- name of the kitty terminal:
-  runner_name = 'kitty-runner-' .. uuid,
+  runner_name = "kitty-runner-" .. uuid,
   -- kitty arguments when sending lines/command:
   run_cmd = { "send-text", "--match=title:" .. "kitty-runner-" .. uuid },
   -- kitty arguments when killing a runner:
