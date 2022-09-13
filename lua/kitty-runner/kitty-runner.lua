@@ -52,7 +52,7 @@ end
 function M.open_runner()
   if runner_is_open == false then
     loop.spawn("kitty", {
-      args = { "@", "new-window", "--title=" .. config["runner_name"], "--keep-focus", "--cwd=" .. vim.fn.getcwd() },
+      args = { "@", "launch", "--title=" .. config["runner_name"], "--keep-focus", "--cwd=" .. vim.fn.getcwd() },
     })
     runner_is_open = true
   end
