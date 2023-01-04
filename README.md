@@ -26,6 +26,12 @@ By default a number of keymaps are created (see below to turn this off):
 - `<leader>tk`: `:KittyKillRunner`
 - `<leader>tl`: `:KittyReRunCommand`
 
+## Environment Variable
+
+kitty-runner sets `$IS_RUNNER` to true in any windows that it launches. This is
+useful for scripting outside of neovim. For example showing an indicator on
+your shell prompt when the window is a kitty-runner window.
+
 ## Installation
 
 With packer:
