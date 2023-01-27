@@ -19,7 +19,7 @@ local prefix = "kitty-runner-"
 -- default configulation values
 local default_config = {
   runner_name = prefix .. uuid,
-  run_cmd = { "send-text", "--match=title:" .. prefix .. uuid, "--" },
+  run_cmd = { "send-text", "--stdin", "--match=title:" .. prefix .. uuid, "--" },
   kill_cmd = { "close-window", "--match=title:" .. prefix .. uuid },
   use_keymaps = true,
   kitty_port = "unix:/tmp/kitty",
